@@ -9,7 +9,7 @@ unidecode
 scipy
 librosa==0.9.1
 ffmpeg
-numpy
+numpy<2
 numba
 torch==2.0.0
 torchaudio==2.0.0
