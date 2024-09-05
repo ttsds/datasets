@@ -1,15 +1,3 @@
-# export WORK_DIR="Amphion"
-# export PYTHONPATH="Amphion"
-# export PYTHONIOENCODING=UTF-8
-# export CUDA_VISIBLE_DEVICES="0"
-# python Amphion/bins/tts/inference.py \
-#     --config="Amphion/egs/tts/NaturalSpeech2/exp_config.json" \
-#     --text=$text \
-#     --mode="single" \
-#     --checkpoint_path="Amphion/ckpts/tts/naturalspeech2_libritts/checkpoint/epoch-0089_step-0512912_loss-6.367693" \
-#     --ref_audio=$ref_audio \
-#     --output_dir=$output_dir \
-
 import sys
 import os
 from pathlib import Path
@@ -22,8 +10,6 @@ Path("../results_naturalspeech2").mkdir(exist_ok=True)
 
 envs = {
     "WORK_DIR": ".",
-    # "PYTHONPATH": "Amphion",
-    # "PYTHONIOENCODING": "UTF-8",
     "CUDA_VISIBLE_DEVICES": "0",
 }
 
@@ -39,19 +25,6 @@ for i in tqdm(range(1, 101)):
     item = Path(f"../../test/{i:03}.wav")
     audio_prompt = item
     infer_text = item.with_suffix(".txt").read_text()
-    # try:
-    # subprocess.run(
-    #     ["python", "Amphion/bins/tts/inference.py",
-    #         "--mode=" + "single",
-    #         "--config=Amphion/egs/tts/NaturalSpeech2/exp_config.json",
-    #         "--text='" + str(text_prompt) + "'",
-    #         "--checkpoint_path=" + "Amphion/ckpts/tts/naturalspeech2_libritts/checkpoint/epoch-0089_step-0512912_loss-6.367693",
-    #         "--ref_audio=" + str(audio_prompt),
-    #         "--output_dir=" + "results_naturalspeech2/single",
-    #     ],
-    #     check=True,
-    #     env=envs,
-    # )
     try:
         sys.argv = [
             "bins/tts/inference.py",
