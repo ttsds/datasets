@@ -26,7 +26,7 @@ def change_versions(system):
 
 
 def gen_tts(input_text, system, version):
-    pass
+    return synthesize(input_text, system, version, None, None)
 
 
 def start_gradio(systems):

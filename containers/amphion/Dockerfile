@@ -35,7 +35,8 @@ RUN ln -s  ../../../naturalspeech2_libritts  ckpts/tts/naturalspeech2_libritts
 # copy requirements.txt from current local directory to /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
-RUN pip install git+https://github.com/MiniXC/fairseq-noconf.git
+RUN apt-get update && apt-get install gcc build-essential g++-12 -y
+RUN pip install fairseq
 
 RUN pip install fastapi[standard] uvicorn
 
