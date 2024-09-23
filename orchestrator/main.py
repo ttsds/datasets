@@ -1,40 +1,33 @@
-from docker_manager import DockerManager
-from gradio_interface import start_gradio
 from time import sleep
+import os
+
+from docker_manager import DockerManager
 import requests
+
+from interface import start_gradio
+from tts_api import TTSApi
 
 if __name__ == "__main__":
     print("Starting orchestrator")
     
     try:
         manager = DockerManager()
-        no_docker = False
+        use_docker = True
     except Exception as e:
-        no_docker = True
+        print(e)
+        use_docker = False
 
     systems = {
-        k: {
-            "versions": [],
-            "port": p
-        } for k, p in [
-            ("amphion", 8001),
-        ]
+        "amphion": 8001,
     }
+
+    print("Starting TTS API")
+    api = TTSApi(systems, use_docker, whisper_model=os.getenv("WHISPER_MODEL", "base.en"))
+
     # get versions for each system
-    for system in list(systems.keys()):
-        if not no_docker:
-            container = manager.start_container(system, port=systems[system]["port"])
-            # check if the container is ready
-        retries = 3
-        port = systems[system]["port"]
-        if no_docker:
-            request_url = f"http://{system}:{port}/info"
-        else:
-            request_url = f"http://localhost:{port}/info"
-        sleep(1)
-        response = requests.get(request_url)
-        systems[system] = response.json()
-        systems[system]["port"] = port
+    for system, port in systems.items():
+        if use_docker:
+            container = manager.start_container(system, port=port)
 
     # Start Gradio interface
-    start_gradio(systems)
+    start_gradio(api)

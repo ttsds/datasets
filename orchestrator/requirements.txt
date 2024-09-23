@@ -1,2 +1,5 @@
 docker
 gradio
+soundfile
+librosa
+openai-whisper
