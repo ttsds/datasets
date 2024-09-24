@@ -12,7 +12,7 @@ SYSTEMS = {
 }
 
 class TTSApi():
-    def __init__(self, systems=SYSTEMS, use_docker=True, whisper_model="base.en", trim_silence=True):
+    def __init__(self, systems=SYSTEMS, use_docker=True, whisper_model="base.en", trim_input_silence=False, trim_output_silence=True):
         self.systems = systems
         self.systems_info = {}
         self.use_docker = use_docker
@@ -22,7 +22,8 @@ class TTSApi():
             self.systems_info[system]["port"] = port
         self.whisper = whisper.load_model(whisper_model)
         self.whisper_model = whisper_model
-        self.trim_silence = trim_silence
+        self.trim_input_silence = trim_input_silence
+        self.trim_output_silence = trim_output_silence
 
     def _process_audio(self, audio):
         if isinstance(audio, tuple):
@@ -47,8 +48,11 @@ class TTSApi():
                 sleep(1)
         return request_url
 
-    def set_trim_silence(self, trim_silence):
-        self.trim_silence = trim_silence
+    def set_trim_input_silence(self, trim_input_silence):
+        self.trim_input_silence = trim_input_silence
+
+    def set_trim_output_silence(self, trim_output_silence):
+        self.trim_output_silence = trim_output_silence
 
     def get_info(self, system):
         if system in self.systems_info:
@@ -63,7 +67,7 @@ class TTSApi():
         info = self.get_info(system)
         byte_arr = io.BytesIO()
         input_audio = self._process_audio(input_audio)
-        if self.trim_silence:
+        if self.trim_input_silence:
             audio = librosa.effects.trim(input_audio[1], top_db=20)[0]
             input_audio = (input_audio[0], audio)
         sf.write(byte_arr, input_audio[1], input_audio[0], format="wav")
@@ -89,7 +93,7 @@ class TTSApi():
             files={"speaker_wav": byte_arr},
         )
         # trim silence
-        if self.trim_silence:
+        if self.trim_output_silence:
             with io.BytesIO(response.content) as f:
                 audio, sr = sf.read(f)
                 audio = librosa.effects.trim(audio, top_db=20)[0]

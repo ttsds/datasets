@@ -19,6 +19,7 @@ if __name__ == "__main__":
 
     systems = {
         "amphion": 8001,
+        "bark": 8002,
     }
 
     print("Starting TTS API")

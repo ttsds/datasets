@@ -70,12 +70,14 @@ def start_gradio(api):
                 system.change(change_versions, system, version)
 
                 # checkbox for trim silence
-                trim_silence = gr.Checkbox(label="Trim silence", value=api.trim_silence)
-                trim_silence.change(api.set_trim_silence, trim_silence)
+                trim_input_silence = gr.Checkbox(label="Trim reference silence", value=api.trim_input_silence)
+                trim_input_silence.change(api.set_trim_input_silence, trim_input_silence)
 
                 run_button = gr.Button("Generate Audio", variant="primary")
             
             with gr.Column():
+                trim_output_silence = gr.Checkbox(label="Trim output silence", value=api.trim_output_silence)
+                trim_output_silence.change(api.set_trim_output_silence, trim_output_silence)
                 audio_out = gr.Audio(
                     label="TTS generation", type="numpy", elem_id="audio_out"
                 )

@@ -12,7 +12,7 @@ from encodec.utils import convert_audio
 from bark_hubert_quantizer.hubert_manager import HuBERTManager
 from bark_hubert_quantizer.pre_kmeans_hubert import CustomHubert
 from bark_hubert_quantizer.customtokenizer import CustomTokenizer
-from bark import SAMPLE_RATE, generate_audio, preload_models
+from bark import SAMPLE_RATE, generate_audio
 from scipy.io.wavfile import write as write_wav
 
 model = ("quantifier_V1_hubert_base_ls960_23.pth", "tokenizer_large.pth")

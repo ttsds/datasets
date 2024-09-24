@@ -60,5 +60,4 @@ WORKDIR /app
 
 ENV port=8000
 
-# CMD ["uvicorn", "amphion_service:app", "--host", "0.0.0.0", "--port", $port]
 CMD uvicorn amphion_service:app --host 0.0.0.0 --port $port --timeout-keep-alive 300

@@ -12,6 +12,19 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+  bark:
+    build: ./containers/bark
+    ports:
+      - "8002:8002"
+    environment:
+      - port=8002
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   orchestrator:
     build: ./orchestrator
     depends_on:
