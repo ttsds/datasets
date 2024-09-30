@@ -82,7 +82,7 @@ for i in tqdm(range(1, 101)):
                 prompt_text=[prompt_text],
                 prompt_tokens=[Path(f"../test/fish_{i:03}.npy")],
                 num_samples=1,
-                max_new_tokens=0,
+                max_new_tokens=2000,
                 top_p=0.7,
                 repetition_penalty=1.2,
                 temperature=0.7,

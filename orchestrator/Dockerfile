@@ -15,6 +15,8 @@ ADD cache_whisper.py /app/cache_whisper.py
 
 RUN --mount=type=cache,target=/root/.cache/huggingface python cache_whisper.py
 
+RUN apt-get update && apt-get install -y ffmpeg
+
 COPY . /app
 
 CMD ["python", "main.py"]

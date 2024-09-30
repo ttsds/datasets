@@ -1,6 +1,7 @@
 from time import sleep
 import io
 from functools import lru_cache
+import tempfile
 
 import requests
 import librosa
@@ -81,7 +82,9 @@ class TTSApi():
         if info["requires_text"][version_idx]:
             if input_text is None:
                 print(f"Reference text is required for {version}, generating using whisper {self.whisper_model} model")
-                input_text = self.whisper.transcribe(input_audio)["text"]
+                with tempfile.NamedTemporaryFile(suffix=".wav") as f:
+                    sf.write(f.name, input_audio[1], input_audio[0], format="wav")
+                    input_text = self.whisper.transcribe(f.name)["text"]
                 print(f"Reference text: {input_text}")
         if input_text is None:
             input_text = ""
@@ -92,6 +95,7 @@ class TTSApi():
             data=data,
             files={"speaker_wav": byte_arr},
         )
+        print(response.content)
         # trim silence
         if self.trim_output_silence:
             with io.BytesIO(response.content) as f:

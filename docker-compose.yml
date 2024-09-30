@@ -25,6 +25,45 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+  fish:
+    build: ./containers/fish
+    ports:
+      - "8003:8003"
+    environment:
+      - port=8003
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  styletts2:
+    build: ./containers/styletts2
+    ports:
+      - "8004:8004"
+    environment:
+      - port=8004
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  parlertts:
+    build: ./containers/parlertts
+    ports:
+      - "8005:8005"
+    environment:
+      - port=8005
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   orchestrator:
     build: ./orchestrator
     depends_on:
