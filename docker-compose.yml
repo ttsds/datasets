@@ -64,6 +64,32 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+  tortoise:
+    build: ./containers/tortoise
+    ports:
+      - "8006:8006"
+    environment:
+      - port=8006
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  hierspeechpp:
+    build: ./containers/hierspeechpp
+    ports:
+      - "8007:8007"
+    environment:
+      - port=8007
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   orchestrator:
     build: ./orchestrator
     depends_on:

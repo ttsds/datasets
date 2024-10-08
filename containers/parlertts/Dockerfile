@@ -23,8 +23,16 @@ ENV port=8000
 
 WORKDIR /app
 
-ADD . /app
+ADD load_models.py /app/load_models.py
 
-RUN python load_model.py
+RUN python load_models.py
+
+RUN --mount=type=cache,target=/root/.cache/pip pip install git+https://github.com/wenet-e2e/wespeaker.git umap hdbscan datasets
+
+ADD parlertts_descriptions.py /app/parlertts_descriptions.py
+
+RUN python parlertts_descriptions.py
+
+ADD . /app
 
 CMD uvicorn parlertts_service:app --host 0.0.0.0 --port $port --timeout-keep-alive 300

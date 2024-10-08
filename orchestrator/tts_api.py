@@ -95,7 +95,6 @@ class TTSApi():
             data=data,
             files={"speaker_wav": byte_arr},
         )
-        print(response.content)
         # trim silence
         if self.trim_output_silence:
             with io.BytesIO(response.content) as f:

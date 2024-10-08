@@ -23,6 +23,8 @@ if __name__ == "__main__":
         "fish": 8003,
         "styletts2": 8004,
         "parlertts": 8005,
+        "tortoise": 8006,
+        "hierspeechpp": 8007,
     }
 
     print("Starting TTS API")
