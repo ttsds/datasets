@@ -1,4 +1,0 @@
-name: 'Amphion VALLEv2'
-command: python Amphion/infer_valle2.py single "{text}" {reference_audio} "{reference_text}" {output}
-batch_command: python Amphion/infer_valle2.py batch {input_file} {output_directory}
-venv: Amphion

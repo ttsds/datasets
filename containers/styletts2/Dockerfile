@@ -7,22 +7,24 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install -U torch torchvision 
 
 WORKDIR /app
 
-ADD . /app
-
-RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
-
 RUN git clone https://github.com/yl4579/StyleTTS2.git
 
 WORKDIR /app/StyleTTS2
+
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 RUN git checkout 5cedc71c333f8d8b8551ca59378bdcc7af4c9529
 RUN git clone https://huggingface.co/yl4579/StyleTTS2-LibriTTS
 
 RUN mv StyleTTS2-LibriTTS/Models .
 
+RUN --mount=type=cache,target=/root/.cache/pip pip install phonemizer
+
 RUN --mount=type=cache,target=/root/.cache/pip pip install fastapi[standard] uvicorn
 
 ENV port=8000
+
+ADD styletts2_service.py /app
 
 WORKDIR /app
 

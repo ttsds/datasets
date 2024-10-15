@@ -19,13 +19,18 @@ if __name__ == "__main__":
 
     systems = {
         "amphion": 8001,
-        "bark": 8002,
-        "fish": 8003,
-        "styletts2": 8004,
-        "parlertts": 8005,
-        "tortoise": 8006,
-        "hierspeechpp": 8007,
-    }
+        # "bark": 8002,
+        # "fish": 8003,
+        # "styletts2": 8004,
+        # "parlertts": 8005,
+        # "tortoise": 8006,
+        # "hierspeechpp": 8007,
+        # "openvoice": 8008,
+        # "pheme": 8009,
+        # "whisperspeech": 8010,
+        # "metavoice": 8011,
+        # "voicecraft": 8012,
+    }   
 
     print("Starting TTS API")
     api = TTSApi(systems, use_docker, whisper_model=os.getenv("WHISPER_MODEL", "base.en"))

@@ -1,3 +1,0 @@
-name: 'Amphion VALLEv1'
-command: python Amphion/infer_valle1.py "{text}" {reference_audio} "{reference_text}" {output}
-venv: Amphion

@@ -53,18 +53,14 @@ def synthesize(
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     try:
-        if version == "Tiny-v1":
-            model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-tiny-v1", device)
-        elif version == "Mini-v1":
+        if version == "Mini-v1":
             model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-mini-v1", device)
         elif version == "Large-v1":
             model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-large-v1", device)
     except RuntimeError as e:
         if "CUDA out of memory" in str(e):
             device = "cpu"
-            if version == "Tiny-v1":
-                model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-tiny-v1", device)
-            elif version == "Mini-v1":
+            if version == "Mini-v1":
                 model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-mini-v1", device)
             elif version == "Large-v1":
                 model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-large-v1", device)
@@ -135,8 +131,8 @@ def synthesize(
 @app.get("/info")
 def info():
     return {
-        "versions": ["Mini-v1", "Large-v1", "Tiny-v1"],
-        "requires_text": [True, True, True],
+        "versions": ["Mini-v1", "Large-v1"],
+        "requires_text": [True, True],
     }
 
 @app.get("/ready")

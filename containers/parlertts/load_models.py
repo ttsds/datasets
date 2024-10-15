@@ -10,6 +10,5 @@ def setup(model_id, device="cpu"):
     SAMPLING_RATE = model.config.sampling_rate
     return model, tokenizer, feature_extractor, SAMPLING_RATE
 
-setup("parler-tts/parler-tts-tiny-v1")
 setup("parler-tts/parler-tts-mini-v1")
 setup("parler-tts/parler-tts-large-v1")

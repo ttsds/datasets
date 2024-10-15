@@ -3,6 +3,9 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse
 import shutil
 import os
+import sys
+
+sys.path.append('/app/metavoice-src')
 
 from fam.llm.fast_inference import TTS
 
@@ -30,21 +33,18 @@ def synthesize(
     # Save the uploaded speaker_wav to a temporary file
     speaker_wav_path = process_speaker_reference(speaker_wav.file.read())
 
-    try:
-        wav_file_path = tts.synthesise(
-            text=text,
-            spk_ref_path=speaker_wav_path,
-            top_p=top_p,
-            guidance_scale=guidance_scale,
-            temperature=temperature,
-        )
+    wav_file_path = tts.synthesise(
+        text=text,
+        spk_ref_path=speaker_wav_path,
+        top_p=top_p,
+        guidance_scale=guidance_scale,
+        temperature=temperature,
+    )
 
-        output_path = "/results_metavoice/output.wav"
-        # Copy the generated wav file to the output path
-        shutil.copy(wav_file_path, output_path)
-        return FileResponse(output_path, media_type="audio/wav", filename="output.wav")
-    except Exception as e:
-        return {"error": str(e)}
+    output_path = "/results_metavoice/output.wav"
+    # Copy the generated wav file to the output path
+    shutil.copy(wav_file_path, output_path)
+    return FileResponse(output_path, media_type="audio/wav", filename="output.wav")
 
 def process_speaker_reference(speaker_wav_bytes: bytes) -> str:
     speaker_wav_path = "/app/speaker.wav"
