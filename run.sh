@@ -1,0 +1,5 @@
+# python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/amphion_ns2/librittsr --tts_system amphion --tts_version "NaturalSpeech 2"
+python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/amphion_ns2/emilia --tts_system amphion --tts_version "NaturalSpeech 2"
+python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/amphion_ns2/librilatest --tts_system amphion --tts_version "NaturalSpeech 2"
+python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/amphion_ns2/myst --tts_system amphion --tts_version "NaturalSpeech 2"
+python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/amphion_ns2/torgo --tts_system amphion --tts_version "NaturalSpeech 2"

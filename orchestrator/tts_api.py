@@ -2,6 +2,7 @@ from time import sleep
 import io
 from functools import lru_cache
 import tempfile
+from pathlib import Path
 
 import requests
 import librosa
@@ -29,7 +30,7 @@ class TTSApi():
     def _process_audio(self, audio):
         if isinstance(audio, tuple):
             return audio
-        elif isinstance(audio, str):
+        elif isinstance(audio, str) or isinstance(audio, Path):
             audio, sr = librosa.load(audio)
             return sr, audio
 

@@ -14,6 +14,8 @@ RUN git checkout tags/v1.4.1
 
 # we remove @click decorators from the scripts so that we can run them as modules
 RUN sed -i '596,624d' tools/llama/generate.py
+# print number of parameters in the model
+RUN sed -i 's/logger.info(f"Time to load model: {time.time() - t0:.02f} seconds")/print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")/g' tools/llama/generate.py
 RUN sed -i '48,68d' tools/vqgan/inference.py
 RUN sed -i 's/fake_audios\[0, 0\].float().cpu().numpy()/fake_audios\[0, 0\].detach().float().cpu().numpy()/g' tools/vqgan/inference.py
 

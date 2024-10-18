@@ -53,6 +53,7 @@ COPY amphion_service.py /app/amphion_service.py
 # insert the following at the beginning of /app/Amphion/bins/tts/inference.py
 # import sys\nsys.path.append('.')\n
 RUN sed -i '1s/^/import sys\nsys.path.append(".")\n/' /app/Amphion/bins/tts/inference.py
+RUN sed -i 's/self.args.text.replace(" ", "_", 100)/"output"/' /app/Amphion/models/tts/naturalspeech2/ns2_inference.py
 
 RUN rm /app/Amphion/ckpts/tts/valle2/optimizer_valle_ar_mls_196000.bin
 

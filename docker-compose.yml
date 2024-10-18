@@ -1,22 +1,22 @@
 services:
-  amphion:
-    build: ./containers/amphion
-    ports:
-      - "8001:8001"
-    environment:
-      - port=8001
+  # amphion:
+  #   build: ./containers/amphion
+  #   ports:
+  #     - "8001:8001"
+  #   environment:
+  #     - port=8001
   # bark:
   #   build: ./containers/bark
   #   ports:
   #     - "8002:8002"
   #   environment:
   #     - port=8002
-  # fish:
-  #   build: ./containers/fish
-  #   ports:
-  #     - "8003:8003"
-  #   environment:
-  #     - port=8003
+  fish:
+    build: ./containers/fish
+    ports:
+      - "8003:8003"
+    environment:
+      - port=8003
   # styletts2:
   #   build: ./containers/styletts2
   #   ports:

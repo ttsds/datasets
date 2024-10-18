@@ -106,10 +106,6 @@ def synthesize_ns2(
         cuda_relevant()
     # don't use build_inference, use NS2Inference directly
     inferencer = NS2Inference(args, cfg)
-    model = inferencer._build_model()
-    # get number of parameters
-    num_params = sum(p.numel() for p in model.parameters())
-    print(f"Number of parameters: {num_params}")
     inferencer.inference()
     return next(Path("/results_naturalspeech2").rglob("*.wav"))
 
@@ -146,10 +142,6 @@ def synthesize_valle(
         cuda_relevant()
     # don't use build_inference, use VALLEInference directly
     inferencer = VALLEInference(args, cfg)
-    model = inferencer._build_model()
-    # get number of parameters
-    num_params = sum(p.numel() for p in model.parameters())
-    print(f"Number of parameters: {num_params}")
     inferencer.inference()
     return next(Path("/results_valle1").rglob("*.wav"))
 
