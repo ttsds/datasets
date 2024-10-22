@@ -30,27 +30,37 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
     for audio_file in tqdm(audio_files):
-        if not ab:
-            text_file = audio_file.with_suffix(".txt")
-        else:
-            text_file = transcript_dir / audio_file.name
-            text_file = text_file.with_suffix(".txt")
-            input_text = audio_file.with_suffix(".txt")
-            input_text = input_text.read_text()
-        with open(text_file, "r") as f:
-            text = f.read()
-        # respect file structure in source_audio_dir
-        if not ab:
-            relative_path = audio_file.relative_to(Path(args.source_audio_dir))
-        else:
-            relative_path = audio_file.name
-        output_file = output_dir / relative_path
-        output_file.parent.mkdir(exist_ok=True, parents=True)
-        audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text)
-        with open(output_file.with_suffix(".wav"), "wb") as f:
-            f.write(audio_bytes)
-        with open(output_file.with_suffix(".txt"), "w") as f:
-            f.write(text)
+        try:
+            if not ab:
+                text_file = audio_file.with_suffix(".txt")
+            else:
+                if audio_file.parent.name not in ['A', 'B']:
+                    text_file = transcript_dir / audio_file.parent.name / audio_file.name
+                else:
+                    text_file = transcript_dir / audio_file.name
+                text_file = text_file.with_suffix(".txt")
+                input_text = audio_file.with_suffix(".txt")
+                input_text = input_text.read_text()
+            with open(text_file, "r") as f:
+                text = f.read()
+            # respect file structure in source_audio_dir
+            if not ab:
+                relative_path = audio_file.relative_to(Path(args.source_audio_dir))
+            else:
+                relative_path = audio_file.name
+            output_file = output_dir / relative_path
+            output_file.parent.mkdir(exist_ok=True, parents=True)
+
+            if output_file.with_suffix(".wav").exists() and output_file.with_suffix(".txt").exists():
+                continue
+
+            audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text)
+            with open(output_file.with_suffix(".wav"), "wb") as f:
+                f.write(audio_bytes)
+            with open(output_file.with_suffix(".txt"), "w") as f:
+                f.write(text)
+        except Exception as e:
+            print(f"Error processing {audio_file}: {e}")
         
 if __name__ == "__main__":
     main()
