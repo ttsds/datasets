@@ -46,6 +46,9 @@ def main():
             relative_path = audio_file.name
         output_file = output_dir / relative_path
         output_file.parent.mkdir(exist_ok=True, parents=True)
+        # check if audio file already exists
+        if output_file.with_suffix(".wav").exists() and output_file.with_suffix(".txt").exists():
+            continue
         audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text)
         with open(output_file.with_suffix(".wav"), "wb") as f:
             f.write(audio_bytes)
