@@ -39,6 +39,9 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install fastapi[standard] uvi
 
 ADD . /app
 
+
+RUN sed -i 's/.cuda()//g' HierSpeechpp/inference.py
+
 # APPEND FUNCTION to inference.py
 
 RUN echo "def set_globals(_device,_hps,_hps_t2w2v,_h_sr,_h_sr48,_hps_denoiser):" >> HierSpeechpp/inference.py
