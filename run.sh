@@ -1,3 +1,4 @@
+sudo apt install ffmpeg
 pip install -r requirements.txt
 
 if [ $1 == "naturalspeech2" ]; then

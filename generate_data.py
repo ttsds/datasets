@@ -29,6 +29,7 @@ def main():
     audio_files = sorted(list(Path(reference_dir).rglob("*.wav")))
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
+    fail_count = 0
     for audio_file in tqdm(audio_files):
         try:
             if not ab:
@@ -61,6 +62,9 @@ def main():
                 f.write(text)
         except Exception as e:
             print(f"Error processing {audio_file}: {e}")
+            fail_count += 1
+            if fail_count > 10:
+                raise e
         
 if __name__ == "__main__":
     main()
