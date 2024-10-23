@@ -41,6 +41,10 @@ ADD . /app
 
 
 RUN sed -i 's/.cuda()//g' HierSpeechpp/inference.py
+RUN sed -i 's/torch.load(a.ckpt)/torch.load(a.ckpt, map_location=torch.device("cpu"))/g' HierSpeechpp/inference.py
+RUN sed -i 's/torch.load(a.ckpt_text2w2v)/torch.load(a.ckpt_text2w2v, map_location=torch.device("cpu"))/g' HierSpeechpp/inference.py
+RUN sed -i 's/.cuda()//g' HierSpeechpp/hierspeechpp_speechsynthesizer.py
+
 
 # APPEND FUNCTION to inference.py
 
