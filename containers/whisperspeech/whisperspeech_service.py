@@ -25,15 +25,23 @@ def synthesize(
     speaker_wav: UploadFile = File(...),
 ):
     print(f"Received request for {version}")
-    if version not in ["Tiny", "Small", "Base"]:
+    if version not in ["Tiny", "Base", "Small", "Medium"]:
         return {"error": "Invalid version"}
     version = version.lower()
-    pipe = Pipeline(
-        optimize=False,
-        torch_compile=False,
-        s2a_ref=f"collabora/whisperspeech:s2a-q4-{version}-en+pl.model",
-        t2s_ref=f"collabora/whisperspeech:t2s-{version}-en+pl.model"
-    )
+    if version != "Medium":
+        pipe = Pipeline(
+            optimize=False,
+            torch_compile=False,
+            s2a_ref=f"collabora/whisperspeech:s2a-q4-{version}-en+pl.model",
+            t2s_ref=f"collabora/whisperspeech:t2s-{version}-en+pl.model"
+        )
+    else:
+        pipe = Pipeline(
+            optimize=False,
+            torch_compile=False,
+            s2a_ref="collabora/whisperspeech:s2a-v1.95-medium-7lang.model",
+            t2s_ref="collabora/whisperspeech:t2s-v1.95-medium-7lang.model"
+        )
     pipe.t2s.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
     pipe.s2a.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
     # Clean up previous results
@@ -59,8 +67,8 @@ def synthesize(
 @app.get("/info")
 def info():
     return {
-        "versions": ["Tiny", "Small", "Base"],
-        "requires_text": [False, False, False],
+        "versions": ["Tiny", "Base", "Small", "Medium"],
+        "requires_text": [False, False, False, False],
     }
 
 @app.get("/ready")
