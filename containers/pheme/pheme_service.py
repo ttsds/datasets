@@ -41,8 +41,6 @@ args.temperature = 0.7
 args.top_k = 210
 args.voice = "male_voice"
 
-pheme_client = PhemeClient(args)
-
 # Initialize PhemeClient
 class PhemeClient():
     def __init__(self, args):
@@ -226,6 +224,8 @@ class PhemeClient():
         ).reshape(1, -1)
 
         return speaker_emb
+
+pheme_client = PhemeClient(args)
 
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
