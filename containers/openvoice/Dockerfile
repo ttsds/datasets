@@ -23,7 +23,7 @@ WORKDIR openvoice_v1
 
 RUN git checkout 34874b77e8ed4fd63ebafcfefafbe31002748486
 
-RUN sed -i "s/assert num_splits > 0/assert True/g" openvoice/se_extractor.py
+RUN sed -i "s/assert num_splits > 0, 'input audio is too short'/num_splits=max(num_splits,1)/g" openvoice/se_extractor.py
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
