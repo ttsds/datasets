@@ -91,7 +91,7 @@ elif [ $1 == "parlertts" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/parlertts/torgo --tts_system parlertts --tts_version "Large-v1"
 elif [ $1 == "pheme" ]; then
     docker stop $(docker ps -a -q)
-    cd containers/pheme && docker build -t pheme . && docker run -p 8000:8000 pheme &
+    cd containers/pheme && docker build -t pheme . && docker run -e HF_TOKEN=$HF_TOKEN -p 8000:8000 pheme &
     python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/pheme/librittsr --tts_system pheme --tts_version "Pheme"
     python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/pheme/emilia --tts_system pheme --tts_version "Pheme"
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/pheme/librilatest --tts_system pheme --tts_version "Pheme"
