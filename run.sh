@@ -25,6 +25,14 @@ elif [ $1 == "bark" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/bark/librilatest --tts_system bark --tts_version "Bark"
     python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/bark/myst --tts_system bark --tts_version "Bark"
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/bark/torgo --tts_system bark --tts_version "Bark"
+elif [ $1 == "e2" ]; then
+    docker stop $(docker ps -a -q)
+    cd containers/f5e2 && docker build -t f5e2 . && docker run -p 8000:8000 f5e2 &
+    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/f5/librittsr --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/f5/emilia --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/f5/librilatest --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/f5/myst --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/f5/torgo --tts_system f5e2 --tts_version "E2-TTS"
 elif [ $1 == "fish" ]; then
     docker stop $(docker ps -a -q)
     cd containers/fish && docker build -t fish . && docker run -p 8000:8000 fish &
@@ -33,6 +41,14 @@ elif [ $1 == "fish" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/fish/librilatest --tts_system fish --tts_version "Fish"
     python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/fish/myst --tts_system fish --tts_version "Fish"
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/fish/torgo --tts_system fish --tts_version "Fish"
+elif [ $1 == "f5" ]; then
+    docker stop $(docker ps -a -q)
+    cd containers/f5e2 && docker build -t f5e2 . && docker run -p 8000:8000 f5e2 &
+    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/f5/librittsr --tts_system f5e2 --tts_version "F5-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/f5/emilia --tts_system f5e2 --tts_version "F5-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/f5/librilatest --tts_system f5e2 --tts_version "F5-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/f5/myst --tts_system f5e2 --tts_version "F5-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/f5/torgo --tts_system f5e2 --tts_version "F5-TTS"
 elif [ $1 == "gpt-sovits" ]; then
     docker stop $(docker ps -a -q)
     cd containers/gpt-sovits && docker build -t gpt-sovits . && docker run -p 8000:8000 gpt-sovits &
@@ -121,4 +137,12 @@ elif [ $1 == "xtts" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/xtts/librilatest --tts_system xtts --tts_version "v2"
     python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/xtts/myst --tts_system xtts --tts_version "v2"
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/xtts/torgo --tts_system xtts --tts_version "v2"
+elif [ $1 == "metavoice" ]; then
+    docker stop $(docker ps -a -q)
+    cd containers/metavoice && docker build -t metavoice . && docker run -p 8000:8000 metavoice &
+    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/metavoice/librittsr --tts_system metavoice --tts_version "metavoice"
+    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/metavoice/emilia --tts_system metavoice --tts_version "metavoice"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/metavoice/librilatest --tts_system metavoice --tts_version "metavoice"
+    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/metavoice/myst --tts_system metavoice --tts_version "metavoice"
+    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/metavoice/torgo --tts_system metavoice --tts_version "metavoice"
 fi
