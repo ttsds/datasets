@@ -49,4 +49,6 @@ RUN python load_models.py
 
 ADD . /app
 
+ENV port=8000
+
 CMD uvicorn metavoice_service:app --host 0.0.0.0 --port $port --timeout-keep-alive 300
