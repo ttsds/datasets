@@ -137,12 +137,4 @@ elif [ $1 == "xtts" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/xtts/librilatest --tts_system xtts --tts_version "v2"
     python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/xtts/myst --tts_system xtts --tts_version "v2"
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/xtts/torgo --tts_system xtts --tts_version "v2"
-elif [ $1 == "metavoice" ]; then
-    docker stop $(docker ps -a -q)
-    cd containers/metavoice && docker build -t metavoice . && docker run -p 8000:8000 metavoice &
-    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/metavoice/librittsr --tts_system metavoice --tts_version "metavoice"
-    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/metavoice/emilia --tts_system metavoice --tts_version "metavoice"
-    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/metavoice/librilatest --tts_system metavoice --tts_version "metavoice"
-    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/metavoice/myst --tts_system metavoice --tts_version "metavoice"
-    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/metavoice/torgo --tts_system metavoice --tts_version "metavoice"
 fi
