@@ -41,6 +41,8 @@ args.temperature = 0.7
 args.top_k = 210
 args.voice = "male_voice"
 
+pheme_client = PhemeClient(args)
+
 # Initialize PhemeClient
 class PhemeClient():
     def __init__(self, args):
@@ -234,7 +236,7 @@ def synthesize(
 ):
     if version not in ["Pheme"]:
         return {"error": "Invalid version"}
-    pheme_client = PhemeClient(args)
+    
     # Process speaker_wav
     if Path("/results_pheme").exists():
         shutil.rmtree("/results_pheme")
