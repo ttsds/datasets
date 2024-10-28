@@ -58,6 +58,7 @@ def main():
 
             if args.timeout > 0:
                 try:
+                    print(audio_file)
                     audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text, timeout=args.timeout)
                 except Exception as e:
                     print(f"Timeout occurred for {audio_file}: {e}")
