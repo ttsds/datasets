@@ -14,6 +14,7 @@ def main():
     parser.add_argument("--output_dir", type=str, required=True)
     parser.add_argument("--tts_system", type=str, required=True)
     parser.add_argument("--tts_version", type=str, required=True)
+    parser.add_argument("--timeout", type=int, default=-1)
     args = parser.parse_args()
     api = TTSApi({args.tts_system: 8000}, use_docker=True)
     dir_paths = sorted(list(Path(args.source_audio_dir).iterdir()))
@@ -55,6 +56,12 @@ def main():
             if output_file.with_suffix(".wav").exists() and output_file.with_suffix(".txt").exists():
                 continue
 
+            if args.timeout > 0:
+                try:
+                    audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text)
+                except Exception as e:
+                    print(f"Timeout occurred for {audio_file}: {e}")
+                    continue
             audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text)
             with open(output_file.with_suffix(".wav"), "wb") as f:
                 f.write(audio_bytes)

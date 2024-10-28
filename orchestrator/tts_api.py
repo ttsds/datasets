@@ -65,7 +65,7 @@ class TTSApi():
         response = requests.get(request_url)
         return response.json()
 
-    def synthesize(self, text, system, version, input_audio, input_text=None):
+    def synthesize(self, text, system, version, input_audio, input_text=None, timeout=-1):
         info = self.get_info(system)
         byte_arr = io.BytesIO()
         input_audio = self._process_audio(input_audio)
@@ -91,11 +91,19 @@ class TTSApi():
             input_text = ""
         data["speaker_txt"] = input_text
         print(input_text)
-        response = requests.post(
-            request_url,
-            data=data,
-            files={"speaker_wav": byte_arr},
-        )
+        if timeout > 0:
+            response = requests.post(
+                request_url,
+                data=data,
+                files={"speaker_wav": byte_arr},
+                timeout=timeout,
+            )
+        else:
+            response = requests.post(
+                request_url,
+                data=data,
+                files={"speaker_wav": byte_arr},
+            )
         # trim silence
         if self.trim_output_silence:
             with io.BytesIO(response.content) as f:

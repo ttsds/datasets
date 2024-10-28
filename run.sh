@@ -97,6 +97,14 @@ elif [ $1 == "pheme" ]; then
     python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/pheme/librilatest --tts_system pheme --tts_version "Pheme"
     python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/pheme/myst --tts_system pheme --tts_version "Pheme"
     python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/pheme/torgo --tts_system pheme --tts_version "Pheme"
+elif [ $1 == "speecht5" ]; then
+    docker stop $(docker ps -a -q)
+    cd containers/speecht5 && docker build -t speecht5 . && docker run -p 8000:8000 speecht5 &
+    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/speecht5/librittsr --tts_system speecht5 --tts_version "SpeechT5"
+    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/speecht5/emilia --tts_system speecht5 --tts_version "SpeechT5"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/speecht5/librilatest --tts_system speecht5 --tts_version "SpeechT5"
+    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/speecht5/myst --tts_system speecht5 --tts_version "SpeechT5" --timeout 180
+    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/speecht5/torgo --tts_system speecht5 --tts_version "SpeechT5"
 elif [ $1 == "styletts2" ]; then
     docker stop $(docker ps -a -q)
     cd containers/styletts2 && docker build -t styletts2 . && docker run -p 8000:8000 styletts2 &
