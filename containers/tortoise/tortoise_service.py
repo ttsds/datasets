@@ -15,25 +15,29 @@ app = FastAPI()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+tts = None
+
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
     text: str = Form(...),
     version: str = Form(...),
     speaker_wav: UploadFile = File(...),
 ):
+    global tts
     if version != "tortoise":
         raise ValueError("Invalid version")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    try:
-        tts = api.TextToSpeech(kv_cache=True)
-    except RuntimeError as e:
-        if "CUDA out of memory" in str(e):
-            device = "cpu"
+    if tts is None:
+        try:
             tts = api.TextToSpeech(kv_cache=True)
-        else:
-            raise e
+        except RuntimeError as e:
+            if "CUDA out of memory" in str(e):
+                device = "cpu"
+                tts = api.TextToSpeech(kv_cache=True)
+            else:
+                raise e
 
     # Create a directory to store results if it doesn't exist
     output_dir = "/results_tortoise"
