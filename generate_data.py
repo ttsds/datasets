@@ -58,8 +58,6 @@ def main():
 
             if args.timeout > 0:
                 try:
-                    if "../v2-evaluation/myst/A/066.wav" in str(audio_file) and "pheme" in args.tts_system:
-                        continue
                     audio_bytes = api.synthesize(text, args.tts_system, args.tts_version, audio_file, input_text=input_text, timeout=args.timeout)
                 except Exception as e:
                     print(f"Timeout occurred for {audio_file}: {e}")

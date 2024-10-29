@@ -40,6 +40,8 @@ def get_closest_description(speaker_file):
     desc = desc.strip()
     return desc
 
+model, tokenizer, feature_extractor, SAMPLING_RATE = None, None, None, None
+
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
     text: str = Form(...),
@@ -47,25 +49,27 @@ def synthesize(
     speaker_wav: UploadFile = File(...),
     speaker_txt: str = Form(...),
 ):
+    global model, tokenizer, feature_extractor, SAMPLING_RATE
     if version not in ["Mini-v1", "Large-v1"]:
         raise ValueError("Invalid version")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    try:
-        if version == "Mini-v1":
-            model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-mini-v1", device)
-        elif version == "Large-v1":
-            model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-large-v1", device)
-    except RuntimeError as e:
-        if "CUDA out of memory" in str(e):
-            device = "cpu"
+    if model is None:
+        try:
             if version == "Mini-v1":
                 model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-mini-v1", device)
             elif version == "Large-v1":
                 model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-large-v1", device)
-        else:
-            raise e
+        except RuntimeError as e:
+            if "CUDA out of memory" in str(e):
+                device = "cpu"
+                if version == "Mini-v1":
+                    model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-mini-v1", device)
+                elif version == "Large-v1":
+                    model, tokenizer, feature_extractor, SAMPLING_RATE = setup("parler-tts/parler-tts-large-v1", device)
+            else:
+                raise e
 
     # Create a directory to store results if it doesn't exist
     output_dir = "/results_parler"
