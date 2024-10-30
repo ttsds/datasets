@@ -28,11 +28,11 @@ elif [ $1 == "bark" ]; then
 elif [ $1 == "e2" ]; then
     docker stop $(docker ps -a -q)
     cd containers/f5e2 && docker build -t f5e2 . && docker run -p 8000:8000 f5e2 &
-    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/f5/librittsr --tts_system f5e2 --tts_version "E2-TTS"
-    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/f5/emilia --tts_system f5e2 --tts_version "E2-TTS"
-    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/f5/librilatest --tts_system f5e2 --tts_version "E2-TTS"
-    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/f5/myst --tts_system f5e2 --tts_version "E2-TTS"
-    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/f5/torgo --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librittsr/ --output_dir ../v2-evaluation/tts/e2/librittsr --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/emilia/ --output_dir ../v2-evaluation/tts/e2/emilia --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/librilatest/ --output_dir ../v2-evaluation/tts/e2/librilatest --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/myst/ --output_dir ../v2-evaluation/tts/e2/myst --tts_system f5e2 --tts_version "E2-TTS"
+    python generate_data.py --source_audio_dir ../v2-evaluation/torgo/ --output_dir ../v2-evaluation/tts/e2/torgo --tts_system f5e2 --tts_version "E2-TTS"
 elif [ $1 == "fish" ]; then
     docker stop $(docker ps -a -q)
     cd containers/fish && docker build -t fish . && docker run -p 8000:8000 fish &
