@@ -18,32 +18,36 @@ def process_speaker_reference(speaker_wav_bytes: bytes):
 def step_callback(*step):
     print(f"Step {step}")
 
+pipe = None
+
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
     text: str = Form(...),
     version: str = Form(...),
     speaker_wav: UploadFile = File(...),
 ):
+    global pipe
     print(f"Received request for {version}")
     if version not in ["Tiny", "Base", "Small", "Medium"]:
         return {"error": "Invalid version"}
     version = version.lower()
-    if version != "Medium":
-        pipe = Pipeline(
-            optimize=False,
-            torch_compile=False,
-            s2a_ref=f"collabora/whisperspeech:s2a-q4-{version}-en+pl.model",
-            t2s_ref=f"collabora/whisperspeech:t2s-{version}-en+pl.model"
-        )
-    else:
-        pipe = Pipeline(
-            optimize=False,
-            torch_compile=False,
-            s2a_ref="collabora/whisperspeech:s2a-v1.95-medium-7lang.model",
-            t2s_ref="collabora/whisperspeech:t2s-v1.95-medium-7lang.model"
-        )
-    pipe.t2s.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
-    pipe.s2a.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
+    if pipe is None:
+        if version != "Medium":
+            pipe = Pipeline(
+                optimize=False,
+                torch_compile=False,
+                s2a_ref=f"collabora/whisperspeech:s2a-q4-{version}-en+pl.model",
+                t2s_ref=f"collabora/whisperspeech:t2s-{version}-en+pl.model"
+            )
+        else:
+            pipe = Pipeline(
+                optimize=False,
+                torch_compile=False,
+                s2a_ref="collabora/whisperspeech:s2a-v1.95-medium-7lang.model",
+                t2s_ref="collabora/whisperspeech:t2s-v1.95-medium-7lang.model"
+            )
+        pipe.t2s.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
+        pipe.s2a.optimize(max_batch_size=1, dtype=torch.float32, torch_compile=False)
     # Clean up previous results
     shutil.rmtree("/results_whisperspeech", ignore_errors=True)
     Path("/results_whisperspeech").mkdir(parents=True, exist_ok=True)
