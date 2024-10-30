@@ -32,7 +32,7 @@ def synthesize(
         return {"error": "Invalid version"}
     version = version.lower()
     if pipe is None:
-        if version != "Medium":
+        if version != "medium":
             pipe = Pipeline(
                 optimize=False,
                 torch_compile=False,
