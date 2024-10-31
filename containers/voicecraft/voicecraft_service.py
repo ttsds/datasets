@@ -145,7 +145,7 @@ def synthesise(orig_audio, orig_transcript, target_transcript, output_dir, name,
     info = torchaudio.info(temp_audio_path)
     audio_dur = info.num_frames / info.sample_rate
 
-    assert cut_off_sec < audio_dur, f"cut_off_sec {cut_off_sec} is larger than the audio duration {audio_dur}"
+    cut_off_sec = min(cut_off_sec, audio_dur)
     prompt_end_frame = int(cut_off_sec * info.sample_rate)
 
     # Seed everything
