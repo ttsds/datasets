@@ -45,7 +45,8 @@ def synthesize(
     output_path = "/results_metavoice/output.wav"
     # Copy the generated wav file to the output path
     shutil.copy(wav_file_path, output_path)
-    shutil.remove(wav_file_path)
+    os.remove(wav_file_path)
+    os.remove(speaker_wav_path)
     return FileResponse(output_path, media_type="audio/wav", filename="output.wav")
 
 def process_speaker_reference(speaker_wav_bytes: bytes) -> str:
