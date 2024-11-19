@@ -4,13 +4,17 @@ from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from TTS.api import TTS
+import torch
 import shutil
 import soundfile as sf
+
+os.environ["COQUI_TOS_AGREED"] = "1"
 
 app = FastAPI()
 
 # Load the XTTS v2 model once when the app starts
-tts_xtts_v2 = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=True)
+gpu_available = torch.cuda.is_available()
+tts_xtts_v2 = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=gpu_available)
 
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
