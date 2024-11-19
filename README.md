@@ -1,6 +1,8 @@
 # TTSDS Datasets
 This repository allows generation of synthetic speech datasets using 18 state-of-the-art open-source TTS models. Since many of these systems require different system dependencies and/or python versions, they are organised as docker containers.
 
+These containers are used to generate the datasets for our TTSDS benchmark @ https://huggingface.co/ttsds
+
 ## TTS Systems
 
 | **System**       | **Training Data**                                  | 🌐 **Multilingual** | 📚 **Training Amount (k hours)** | 🧠 **Num. Parameters (M)** | 🎯 **Target Repr.**        | 📖 **LibriVox Only** | 🔄 **NAR** | 🔁 **AR** | 🔡 **G2P** | 🧩 **Language Model** | 🎵 **Prosody Prediction** | 🌊 **Diffusion** | ⏱️ **Delay Pattern** |
