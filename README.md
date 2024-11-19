@@ -3,6 +3,8 @@ This repository allows generation of synthetic speech datasets using 18 state-of
 
 These containers are used to generate the datasets for our TTSDS benchmark @ https://huggingface.co/ttsds
 
+**NOTE**: The v2_evaluation dataset is not public at the moment, so you will have to edit ``run.sh`` with the path(s) to your own datasets.
+
 ## TTS Systems
 
 | **System**       | **Training Data**                                  | 🌐 **Multilingual** | 📚 **Training Amount (k hours)** | 🧠 **Num. Parameters (M)** | 🎯 **Target Repr.**        | 📖 **LibriVox Only** | 🔄 **NAR** | 🔁 **AR** | 🔡 **G2P** | 🧩 **Language Model** | 🎵 **Prosody Prediction** | 🌊 **Diffusion** | ⏱️ **Delay Pattern** |
