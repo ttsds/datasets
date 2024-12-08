@@ -28,6 +28,32 @@ These containers are used to generate the datasets for our TTSDS benchmark @ htt
 | [**XTTSv2**](https://github.com/idiap/coqui-ai-TTS)        | LibriTTS, Common Voice, Internal                 | ✅                  | 27                                | 456                        | Audio Codec Code (Own)    | ❌                   | ❌          | ✅         | ❌          | ✅                     | ❌                        | ❌                | ❌                   |
 | [**E2-TTS**](https://github.com/SWivid/F5-TTS)        | Emilia                                           | ✅                  | 95                                | 330                        | Mel Spectrogram           | ❌                   | ✅          | ❌         | ✅          | ❌                     | ✅                        | ❌                | ❌                   |
 
+## Legend
+
+- 🌐 Multilingual
+  - The ISO codes of languages the model is capable off. ❌ if English only.
+- 📚 Training Amount (k hours)
+  - The number of hours the model was trained on
+- 🧠 Num. Parameters (M)
+  - How many parameters the model has, excluding vocoder and text-only components
+- 🎯 Target Repr.
+  - Which output representations the model uses, for example audio codecs or mel spectrograms
+- 📖 LibriVox Only
+  - If the model was trained on librivox-like (audiobook) data alone
+- 🔄 NAR
+  - If the model has a significant non-autoregressive component
+- 🔁 AR
+  - If the model has a significant autoregressive component
+- 🔡 G2P
+  - If the model uses G2P (phone inputs)
+- 🧩 Language Model
+  - If an LM-like approach is used (next token prediction)
+- 🎵 Prosody Prediction
+  - If prosodic correlates such as pitch or energy are predicted
+- 🌊 Diffusion
+  - If diffusion is used (outside vocoder)
+- ⏱️ Delay Pattern
+  - If a delay pattern is used for audio codes (see [Lyth & King, 2024](https://arxiv.org/abs/2402.01912))
 
 ## Requirements
  - Python 3.10
