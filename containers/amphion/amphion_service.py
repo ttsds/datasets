@@ -160,9 +160,6 @@ def synthesize_valle2(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = ValleInference(ar_path=ar_model_path, nar_path=nar_model_path, device=device, speechtokenizer_path=speechtokenizer_path)
     wav, _ = librosa.load(audio_prompt, sr=16000)
-    # remove an additional 10ms from both ends
-    wav = wav[int(0.01*16000):int(-0.01*16000)]
-    print(text_prompt)
     g2p = G2pProcessor()
     prompt_transcript = g2p(text_prompt, 'en')[1]
     target_transcript = g2p(text, 'en')[1]
@@ -171,15 +168,15 @@ def synthesize_valle2(
     transcript = torch.cat([prompt_transcript, target_transcript], dim=-1)
     wav = torch.tensor(wav).float()
     batch = {
-            'speech': wav.unsqueeze(0),
-            'phone_ids': transcript.unsqueeze(0),
+        'speech': wav.unsqueeze(0),
+        'phone_ids': transcript.unsqueeze(0),
     }
     configs = [dict(
-        max_length=2000,
-        temperature=1.0,
-        top_k=100,
         top_p=0.9,
+        top_k=5,
+        temperature=0.95,
         repeat_penalty=1.0,
+        max_length=2000,
         num_beams=1,
     )] # model inference hyperparameters
     output_wav = model(batch, configs)[0][0].cpu().numpy()
