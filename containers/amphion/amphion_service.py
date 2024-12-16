@@ -8,12 +8,14 @@ import argparse
 
 import torch
 from fastapi import FastAPI, UploadFile, File, Form
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 import librosa
 import numpy as np
 import torch
 import soundfile as sf
 from pydantic import BaseModel
+from encodec import EncodecModel
+import nltk
 
 
 os.chdir("/app/Amphion")
@@ -26,6 +28,9 @@ from models.tts.valle_v2.g2p_processor import G2pProcessor
 from models.tts.valle.valle_inference import VALLEInference
 from models.tts.naturalspeech2.ns2_inference import NS2Inference
 from utils.util import load_config
+
+os.environ.update({"WORK_DIR": "."})
+os.chdir("/app/Amphion")
 
 def cuda_relevant(deterministic=False):
     torch.cuda.empty_cache()
@@ -184,15 +189,116 @@ def synthesize_valle2(
     sf.write(output_path, output_wav, 16000)
     return output_path
 
+# respond with json to indicate which file(s) to download and where to put them
+@app.post("/download", response_class=JSONResponse)
+def download(system: str = Form(...), version: str = Form(...)):
+    if system == "valle":
+        if version == "v1_small":
+            return {
+                "huggingface": [
+                    ["amphion/valle_libritts", "valle_v1_small"],
+                ]
+            }
+        elif version == "v1_medium":
+            return {
+                "huggingface": [
+                    ["amphion/valle_librilight_6k", "valle_v1_medium"],
+                ]
+            }
+        elif version == "v2":
+            return {
+                "direct": [
+                    ["https://huggingface.co/amphion/valle/resolve/main/valle_ar_mls_196000.bin", "valle_v2/valle_ar_mls_196000.bin"],
+                    ["https://huggingface.co/amphion/valle/resolve/main/valle_nar_mls_164000.bin", "valle_v2/valle_nar_mls_164000.bin"],
+                    ["https://huggingface.co/amphion/valle/resolve/main/SpeechTokenizer.pt", "valle_v2/tokenizer/SpeechTokenizer.pt"],
+                    ["https://huggingface.co/amphion/valle/resolve/main/config.json", "valle_v2/tokenizer/config.json"],
+                ]
+            }
+    elif system == "naturalspeech2":
+        if version == "v1":
+            return {
+                "huggingface": [
+                    ["amphion/naturalspeech2_libritts", "naturalspeech2_v1"],
+                ]
+            }
+    elif system == "maskgct":
+        if version == "v1":
+            return {
+                "huggingface": [
+                    ["amphion/maskgct", "maskgct_v1"],
+                ]
+            }
+
+@app.post("/load", response_class=JSONResponse)
+def load(system: str = Form(...), version: str = Form(...)):
+    global infer_valle_v1_small, infer_valle_v1_medium, infer_valle_v2, infer_naturalspeech2_v1, infer_maskgct_v1
+    if system == "valle":
+        if version == "v1_small":
+            args = {
+                "mode": "single",
+                "config": "ckpts/tts/valle_v1_small/args.json",
+                "infer_mode": "single",
+                "top_k": -100,
+                "temperature": 1.0,
+                "continual": False,
+                "copysyn": False,
+            }
+            new_args = default_valle_args.copy()
+            for k, v in args.items():
+                new_args[k] = v
+            # into namespace
+            args = argparse.Namespace(**new_args)
+            cfg = load_config(args.config)
+            infer_valle_v1_small = VALLEInference(args, cfg)
+            return {"status": "loaded"}
+        elif version == "v1_medium":
+            args = {
+                "mode": "single",
+                "config": "ckpts/tts/valle_v1_medium/args.json",
+                "infer_mode": "single",
+                "top_k": -100,
+                "temperature": 1.0,
+                "continual": False,
+                "copysyn": False,
+            }
+            new_args = default_valle_args.copy()
+            for k, v in args.items():
+                new_args[k] = v
+            # into namespace
+            args = argparse.Namespace(**new_args)
+            cfg = load_config(args.config)
+            infer_valle_v1_medium = VALLEInference(args, cfg)
+            return {"status": "loaded"}
+        elif version == "v2":
+            ar_model_path = 'ckpts/tts/valle_v2/valle_ar_mls_196000.bin'
+            nar_model_path = 'ckpts/tts/valle_v2/valle_nar_mls_164000.bin'
+            speechtokenizer_path = 'ckpts/tts/valle_v2/tokenizer'
+            infer_valle_v2 = ValleInference(ar_path=ar_model_path, nar_path=nar_model_path, device=torch.device("cuda" if torch.cuda.is_available() else "cpu"), speechtokenizer_path=speechtokenizer_path)
+            return {"status": "loaded"}
+    elif system == "naturalspeech2":
+        if version == "v1":
+            args = {
+                "mode": "single",
+                "config": "egs/tts/NaturalSpeech2/exp_config.json",
+                "checkpoint_path": "ckpts/tts/naturalspeech2_v1/checkpoint/epoch-0089_step-0512912_loss-6.367693",
+            }
+            new_args = default_ns2_args.copy()
+            for k, v in args.items():
+                new_args[k] = v
+            # into namespace
+            args = argparse.Namespace(**new_args)
+            cfg = load_config(args.config)
+            infer_naturalspeech2_v1 = NS2Inference(args, cfg)
+            return {"status": "loaded"}
+
 @app.post("/synthesize", response_class=FileResponse)
 def synthesize(
     text: str = Form(...),
+    system: str = Form(...),
     version: str = Form(...),
     speaker_wav: UploadFile = File(...),
     speaker_txt: str = Form(...),
 ):
-    if version not in ["NaturalSpeech 2", "VALL-E v1", "VALL-E v2"]:
-        return {"error": "Invalid version"}
     if version == "NaturalSpeech 2":
         audio_prompt = process_speaker_reference(speaker_wav.file.read())
         output = synthesize_ns2(text, audio_prompt)
@@ -222,8 +328,9 @@ def process_text_reference(speaker_txt: str):
 @app.get("/info")
 def info():
     return {
-         "versions": ["NaturalSpeech 2", "VALL-E v1", "VALL-E v2"],
-         "requires_text": [False, True, True],
+         "valle": ["v1_small", "v1_medium", "v2"],
+         "naturalspeech2": ["v1"],
+         "maskgct": ["v1"],
     }
 
 @app.get("/ready")

@@ -1,35 +1,19 @@
 ARG gpus=all
 FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
 
-RUN apt-get update && apt-get install -y git git-lfs
+RUN apt-get update && apt-get install -y git
 
 WORKDIR /app
 RUN git clone https://github.com/open-mmlab/Amphion.git
 WORKDIR Amphion
-RUN git checkout 211e1d4
-WORKDIR /app
-RUN git clone https://huggingface.co/amphion/valle_librilight_6k
-WORKDIR valle_librilight_6k
-RUN git lfs pull
-WORKDIR /app
-RUN git clone https://huggingface.co/amphion/naturalspeech2_libritts
-WORKDIR naturalspeech2_libritts
-RUN git lfs pull
-WORKDIR /app
-RUN git clone https://huggingface.co/amphion/valle
-WORKDIR valle
-RUN git lfs pull
-WORKDIR /app
+RUN git checkout f7cb4b4
 
-RUN python --version >> python_version.txt
-
-WORKDIR Amphion
-RUN sed -i '18s/.*/. ..\/..\/.venv\/Amphion\/bin\/activate/' egs/tts/VALLE/run.sh
 RUN mkdir -p ckpts/tts
-RUN ln -s  ../../../valle_librilight_6k  ckpts/tts/valle1
-RUN ln -s  ../../../valle_libritts  ckpts/tts/valle1_libritts
-RUN ln -s  ../../../naturalspeech2_libritts  ckpts/tts/naturalspeech2_libritts
-RUN ln -s  ../../../valle  ckpts/tts/valle2
+RUN ln -s  /downloads/valle_v1_small  ckpts/tts/valle_v1_small
+RUN ln -s  /downloads/valle_v1_medium ckpts/tts/valle_v1_medium
+RUN ln -s  /downloads/valle_v2 ckpts/tts/valle_v2
+RUN ln -s  /downloads/naturalspeech2_v1 ckpts/tts/naturalspeech2_v1
+RUN ln -s  /downloads/maskgct_v1 ckpts/tts/maskgct_v1
 
 # copy requirements.txt from current local directory to /app
 RUN apt-get update && apt-get install gcc build-essential g++-12 -y
@@ -54,8 +38,6 @@ COPY amphion_service.py /app/amphion_service.py
 # import sys\nsys.path.append('.')\n
 RUN sed -i '1s/^/import sys\nsys.path.append(".")\n/' /app/Amphion/bins/tts/inference.py
 RUN sed -i 's/self.args.text.replace(" ", "_", 100)/"output"/' /app/Amphion/models/tts/naturalspeech2/ns2_inference.py
-
-RUN rm /app/Amphion/ckpts/tts/valle2/optimizer_valle_ar_mls_196000.bin
 
 WORKDIR /app
 
