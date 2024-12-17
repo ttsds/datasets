@@ -1,7 +1,7 @@
 ---
 provider_name: fishaudio
 systems:
-  - fish_speech:
+  - id: fish_speech
     display_name: "Fish Speech"
     url: "https://github.com/fishaudio/fish-speech"
     training_data:
@@ -42,7 +42,7 @@ systems:
             url={https://arxiv.org/abs/2411.01156}, 
       }
     versions:
-      - v1:
+      - id: v1
         display_name: "v1"
         languages:
           - en
@@ -51,7 +51,7 @@ systems:
         training_hours: 150000
         is_official: true
         license: "Apache-2.0"
-      - v1.2:
+      - id: v1.2
         display_name: "v1.2"
         languages:
           - en
@@ -60,7 +60,7 @@ systems:
         training_hours: 300000
         is_official: true
         license: "Apache-2.0"
-      - v1.2-sft:
+      - id: v1.2-sft
         display_name: "v1.2-sft"
         languages:
           - en
@@ -69,7 +69,7 @@ systems:
         training_hours: 300000
         is_official: true
         license: "Apache-2.0"
-      - v1.4:
+      - id: v1.4
         display_name: "v1.4"
         languages:
           - en
@@ -81,7 +81,7 @@ systems:
           - ko
           - ar
         training_hours: 700000
-      - v1.5:
+      - id: v1.5
         display_name: "v1.5"
         languages:
           - en

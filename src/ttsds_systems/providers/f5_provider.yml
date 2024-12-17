@@ -1,7 +1,7 @@
 ---
 provider_name: f5
 systems:
-  - f5:
+  - id: f5
     display_name: "F5-TTS"
     paper: "https://arxiv.org/abs/2410.06885"
     training_data: Emilia
@@ -25,11 +25,11 @@ systems:
         year={2024}
       }
     versions:
-      - v1:
+      - id: v1
         display_name: "v1"
         is_official: true
         license: "MIT"
-  - e2:
+  - id: e2
     display_name: "E2 TTS"
     paper: "https://arxiv.org/abs/2406.18009"
     training_data: Libriheavy
@@ -52,7 +52,7 @@ systems:
         year={2024}
       }
     versions:
-      - v1:
+      - id: v1
         display_name: "v1"
         training_data: Emilia
         languages:

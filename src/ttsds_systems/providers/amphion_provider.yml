@@ -1,7 +1,8 @@
 ---
 provider_name: amphion
+package_url: ghcr.io/ttsds/amphion
 systems:
-  - valle:
+  - id: valle
     display_name: "VALL-E"
     paper: "https://arxiv.org/abs/2301.02111"
     training_data: LibriLight
@@ -31,28 +32,28 @@ systems:
         year={2023}
       }
     versions:
-      - v1_small:
+      - id: v1_small
         display_name: "v1 Small"
         is_official: false
         training_hours: 585
         training_data: LibriTTS
         num_parameters: 370M
         license: "MIT"
-      - v1_medium:
+      - id: v1_medium
         display_name: "v1 Medium"
         is_official: false
         training_hours: 6000
         training_data: LibriLight
         num_parameters: 370M
         license: "MIT"
-      - v2:
+      - id: v2
         display_name: "v2"
         is_official: true
         training_hours: 45000
         training_data: MLS
         num_parameters: '?M'
         license: "MIT"
-  - naturalspeech2:
+  - id: naturalspeech2
     display_name: "NaturalSpeech 2"
     paper: "https://arxiv.org/abs/2304.09116"
     training_data: MLS
@@ -82,14 +83,14 @@ systems:
         year={2023}
       }
     versions:
-      - v1:
+      - id: v1
         display_name: "v1"
         is_official: false
         training_hours: 585
         training_data: LibriTTS
         num_parameters: 380M
         license: "MIT"
-  - maskgct:
+  - id: maskgct
     display_name: "MaskGCT"
     paper: "https://arxiv.org/abs/2304.09116"
     training_data: Emilia
@@ -118,7 +119,7 @@ systems:
           year={2024}
       }
     versions:
-      - v1:
+      - id: v1
         display_name: "v1"
         is_official: true
         license: "MIT"
